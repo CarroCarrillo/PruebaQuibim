@@ -1,0 +1,22 @@
+<table class="table is-fullwidth">
+    <thead>
+      <tr>
+        <th>Year</th>
+        <th>Event Type</th>
+        <th>Description</th>
+        <th></th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let event of pagedEvents">
+        <td>{{ event.year }}</td>
+        <td>{{ event.type }}</td>
+        <td [innerHTML]="event.no_year_html"></td>
+        <td>
+          <span (click)="openModal.next(event)" class="icon is-small" class="has-tooltip-arrow" data-tooltip="Visualize">
+            <fa-icon [icon]="faEye"></fa-icon>
+          </span>
+        </td>
+      </tr>
+    </tbody>
+</table>

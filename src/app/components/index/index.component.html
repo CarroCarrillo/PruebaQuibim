@@ -1,0 +1,150 @@
+<section *ngIf="eventEnum" class="section">
+    <div class="columns is-multiline is-justify-content-center">
+      <form [formGroup]="form" (submit)="onSearch()">
+        <div>
+          <div class="field">
+            <label class="label">Event Type</label>
+            <div class="control">
+              <div class="select">
+                <select formControlName="eventType">
+                  <option value=""></option>
+                  <option [value]="eventEnum.EVENT">Events</option>
+                  <option [value]="eventEnum.BIRTH">Births</option>
+                  <option [value]="eventEnum.DEATH">Deaths</option>
+                </select>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div>
+          <div class="field">
+            <label class="label">From</label>
+          </div>
+          <div class="field has-addons">
+            <div class="control">
+              <input formControlName="dayFrom" class="input" type="number" placeholder="Day"
+              [ngClass]="{'is-danger': f.dayFrom?.errors || form.errors?.invalidInitialDateValidator}">
+              <p *ngIf="f.dayFrom.errors?.min" class="help is-danger">Day must be greater than 0.</p>
+              <p *ngIf="f.dayFrom.errors?.max" class="help is-danger">Day must be less than 32.</p>
+            </div>
+            <div class="control">
+              <div class="select" [ngClass]="{'is-danger': form.errors?.invalidInitialDateValidator}">
+                <select formControlName="monthFrom">
+                  <option value=""></option>
+                  <option value="1">January</option>
+                  <option value="2">February</option>
+                  <option value="3">March</option>
+                  <option value="4">April</option>
+                  <option value="5">May</option>
+                  <option value="6">June</option>
+                  <option value="7">July</option>
+                  <option value="8">August</option>
+                  <option value="9">September</option>
+                  <option value="10">October</option>
+                  <option value="11">November</option>
+                  <option value="12">December</option>
+                </select>
+              </div>
+            </div>
+          </div>
+          <p *ngIf="form.errors?.invalidInitialDateValidator" class="help is-danger invalid-date">Invalid date.</p>
+        </div>
+        <div>
+          <div class="field">
+            <label class="label">To</label>
+          </div>
+          <div class="field has-addons">
+            <div class="control">
+              <input formControlName="dayTo" class="input" type="number" placeholder="Day"
+              [ngClass]="{'is-danger': f.dayTo?.errors || form.errors?.invalidFinalDateValidator}">
+              <p *ngIf="f.dayTo.errors?.min" class="help is-danger">Day must be greater than 0.</p>
+              <p *ngIf="f.dayTo.errors?.max" class="help is-danger">Day must be less than 32.</p>
+            </div>
+            <div class="control">
+              <div class="select" [ngClass]="{'is-danger': form.errors?.notSameMonthValidator || form.errors?.invalidFinalDateValidator}">
+                <select formControlName="monthTo">
+                  <option value=""></option>
+                  <option value="1">January</option>
+                  <option value="2">February</option>
+                  <option value="3">March</option>
+                  <option value="4">April</option>
+                  <option value="5">May</option>
+                  <option value="6">June</option>
+                  <option value="7">July</option>
+                  <option value="8">August</option>
+                  <option value="9">September</option>
+                  <option value="10">October</option>
+                  <option value="11">November</option>
+                  <option value="12">December</option>
+                </select>
+              </div>
+              <p *ngIf="form.errors?.notSameMonthValidator" class="help is-danger invalid-same-month">This month must be the same as initial month.</p>
+            </div>
+          </div>
+          <p *ngIf="form.errors?.invalidFinalDateValidator" class="help is-danger invalid-date">Invalid date.</p>
+        </div>
+        <div>
+          <div class="field is-grouped">
+            <div class="control">
+              <button class="button is-link" [ngClass]="{'is-loading': loading}">Search</button>
+            </div>
+          </div>
+        </div>
+      </form>
+    </div>
+</section>
+<section class="container">
+    <div class="columns is-justify-content-center">
+      <div class="column is-10">
+        <p class="buttons is-pulled-right">
+          <button class="has-tooltip-arrow" data-tooltip="List View" class="button" [ngClass]="{'is-focused': view == viewEnum.LIST}" (click)="setView(viewEnum.LIST)">
+            <span class="icon is-small">
+              <fa-icon [icon]="faList"></fa-icon>
+            </span>
+          </button>
+          <button class="has-tooltip-arrow" data-tooltip="Card View" class="button" [ngClass]="{'is-focused': view == viewEnum.CARD}" (click)="setView(viewEnum.CARD)">
+            <span class="icon is-small">
+              <fa-icon [icon]="faThLarge"></fa-icon>
+            </span>
+          </button>
+        </p>
+      </div>
+    </div>
+    <div id="data-column" class="columns is-justify-content-center">
+        <div class="column is-10">
+          <ng-container *ngIf="view == viewEnum.LIST; else cardTemplate">
+            <app-data-table [events]="events" (openModal)="openModal($event)"></app-data-table>
+          </ng-container>
+          <ng-template #cardTemplate>
+            <app-timeline [events]="events" (openModal)="openModal($event)"></app-timeline>
+          </ng-template>
+            <app-pagination></app-pagination>
+          </div>
+    </div>
+</section>
+
+<div class="modal animate__animated animate__fadeIn" [ngClass]="{'is-active': modal}">
+  <div class="modal-background" (click)="closeModal()"></div>
+  <div class="modal-card">
+    <header class="modal-card-head">
+      <p class="modal-card-title">{{ selectedEvent?.type }}</p>
+      <button class="delete" aria-label="close" (click)="closeModal()"></button>
+    </header>
+    <section class="modal-card-body">
+      <div class="card">
+        <div class="card-content">
+          <p class="title">
+            <span [innerHTML]="selectedEvent?.no_year_html"></span>
+          </p>
+          <p class="subtitle">
+            <time>{{ selectedEvent?.year }}</time>
+          </p>
+        </div>
+      </div>
+    </section>
+    <footer class="modal-card-foot">
+      <button class="button is-success" (click)="closeModal()">OK</button>
+      <button class="button" (click)="closeModal()">Cancel</button>
+    </footer>
+  </div>
+</div>

@@ -26,14 +26,21 @@
             "polyfills": "src/polyfills.ts",
             "tsConfig": "tsconfig.app.json",
             "inlineStyleLanguage": "sass",
+            "baseHref": "/quibim/",
+            "deployUrl": "/quibim/",
             "assets": [
               "src/favicon.ico",
               "src/assets"
             ],
             "styles": [
+              "node_modules/bulma/bulma.sass",
+              "node_modules/@creativebulma/bulma-tooltip/dist/bulma-tooltip.min.css",
+              "node_modules/animate.css/animate.min.css",
               "src/styles.sass"
             ],
-            "scripts": []
+            "scripts": [
+              "node_modules/bulma-toast/dist/bulma-toast.min.js"
+            ]
           },
           "configurations": {
             "production": {

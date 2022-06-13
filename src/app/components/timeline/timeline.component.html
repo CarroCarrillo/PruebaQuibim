@@ -1,0 +1,22 @@
+<div class="container">
+    <div *ngFor="let event of pagedEvents" class="card">
+      <header class="card-header">
+        <p class="card-header-title">
+          {{ event.type }}
+        </p>
+        <span (click)="openModal.next(event)" class="icon is-small" class="has-tooltip-arrow" data-tooltip="Visualize">
+          <fa-icon [icon]="faEye"></fa-icon>
+        </span>
+      </header>
+      <div class="card-content">
+        <div class="content">
+          <span [innerHTML]="event.no_year_html"></span>
+          <br>
+          
+        </div>
+      </div>
+      <footer class="card-footer">
+          <p class="card-footer-item"><time>{{ event.year }}</time></p>
+      </footer>
+    </div>
+</div>

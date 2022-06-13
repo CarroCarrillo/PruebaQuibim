@@ -1,0 +1,13 @@
+<nav class="pagination is-centered" role="navigation" aria-label="pagination">
+    <a *ngIf="page > 1" class="pagination-previous" (click)="p.previousPage()">Previous</a>
+    <a *ngIf="p.totalPages > page" class="pagination-next" (click)="p.nextPage()">Next</a>
+    <ul class="pagination-list">
+      <li *ngIf="page > 2"><a class="pagination-link" aria-label="Goto page 1" (click)="p.goTo(1)">1</a></li>
+      <li *ngIf="page > 3"><span class="pagination-ellipsis">&hellip;</span></li>
+      <li *ngIf="page > 1"><a class="pagination-link" aria-label="Goto previous page" (click)="p.previousPage()">{{ page - 1}}</a></li>
+      <li><a class="pagination-link is-current" aria-label="Current page" aria-current="page">{{ page }}</a></li>
+      <li *ngIf="p.totalPages > page"><a class="pagination-link" aria-label="Goto next page" (click)="p.nextPage()">{{ page + 1 }}</a></li>
+      <li *ngIf="p.totalPages > page + 2"><span class="pagination-ellipsis">&hellip;</span></li>
+      <li *ngIf="p.totalPages > page + 1"><a class="pagination-link" aria-label="Goto last page" (click)="p.goTo(p.totalPages)">{{ p.totalPages }}</a></li>
+    </ul>
+</nav>
